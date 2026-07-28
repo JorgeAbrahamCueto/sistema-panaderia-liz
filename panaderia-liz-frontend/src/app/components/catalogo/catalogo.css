@@ -1,0 +1,217 @@
+.catalogo-wrapper {
+  padding: 40px;
+  background-color: #fcfbf9; /* Color crema de fondo */
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Cabecera */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.header-container h1 {
+  font-family: 'Playfair Display', serif;
+  color: #2c1e16;
+  font-size: 32px;
+  margin: 0 0 5px 0;
+}
+
+.header-container p {
+  color: #666;
+  margin: 0;
+  font-size: 14px;
+}
+
+.btn-nuevo {
+  background-color: #c45b42; /* Terracota */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-nuevo:hover {
+  background-color: #a34b35;
+}
+
+/* Pestañas */
+.tabs-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  background: #f0ebe1;
+  padding: 5px;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  color: #666;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+  background: white;
+  color: #2c1e16;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Controles de filtro */
+.filtros-container {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.input-buscar, .select-categoria {
+  padding: 10px 15px;
+  border: 1px solid #e0dcd5;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+}
+
+.input-buscar {
+  width: 300px;
+}
+
+/* Tabla de Productos */
+.table-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  overflow: hidden;
+  border: 1px solid #f0ebe1;
+}
+
+.catalogo-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.catalogo-table th {
+  text-align: left;
+  padding: 15px 20px;
+  font-size: 12px;
+  color: #888;
+  text-transform: uppercase;
+  border-bottom: 1px solid #f0ebe1;
+}
+
+.catalogo-table td {
+  padding: 15px 20px;
+  border-bottom: 1px solid #f0ebe1;
+  color: #444;
+  vertical-align: middle;
+}
+
+.col-nombre { font-weight: 500; color: #2c1e16 !important; }
+.col-precio { font-family: monospace; font-size: 14px; }
+.col-stock { font-weight: bold; color: #4CAF50; }
+.col-stock.low-stock { color: #f44336; }
+
+.badge-cat {
+  background: #fdf2f0;
+  color: #c45b42;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Botones de acción (Tabla y Cards) */
+.col-acciones { display: flex; gap: 8px; }
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid #e0dcd5;
+  color: #666;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 13px;
+}
+
+.btn-outline:hover { border-color: #c45b42; color: #c45b42; }
+.btn-outline.danger:hover { border-color: #f44336; color: #f44336; }
+
+/* Grid de Categorías */
+.grid-categorias {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.categoria-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #f0ebe1;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.icon-placeholder {
+  background: #fdf2f0;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 20px;
+}
+
+.item-count { color: #888; font-size: 13px; }
+
+.card-body h3 {
+  margin: 0 0 5px 0;
+  color: #2c1e16;
+}
+
+.card-body p {
+  margin: 0 0 20px 0;
+  color: #666;
+  font-size: 14px;
+  flex-grow: 1;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.card-footer .btn-outline { flex-grow: 1; }
+
+.btn-icon {
+  background: transparent;
+  border: 1px solid #e0dcd5;
+  color: #666;
+  width: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-icon.danger:hover {
+  border-color: #f44336; color: #f44336;
+}

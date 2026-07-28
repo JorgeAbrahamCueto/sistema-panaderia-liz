@@ -1,0 +1,171 @@
+<div class="pos-wrapper">
+
+  <div class="main-content">
+    <div class="header-section" style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h1>Punto de Venta</h1>
+        <p>Selecciona productos para agregar al carrito</p>
+      </div>
+      <button (click)="irAHome()" style="padding: 10px 18px; background-color: #4f46e5; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: background 0.2s;">
+        🏠 Ir al Inicio (Home)
+      </button>
+    </div>
+
+    @if (mensajeExito) { <div class="alert success">{{ mensajeExito }}</div> }
+    @if (mensajeError) { <div class="alert error">{{ mensajeError }}</div> }
+
+    @if (!categoriaSeleccionada) {
+      <div class="header-titulo" style="margin-bottom: 20px;">
+        <h2 style="color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px;">Seleccione una Categoría</h2>
+      </div>
+      
+      <div class="grid-categorias" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;">
+        @for (cat of categorias; track $index) {
+          <div class="categoria-card" (click)="seleccionarCategoria(cat)" 
+               style="background: white; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 2px solid transparent; transition: 0.2s;">
+            <div style="font-size: 40px; margin-bottom: 10px;">📁</div>
+            <h3 style="margin: 0; color: #333; font-size: 16px;">{{ cat.nombre }}</h3>
+          </div>
+        }
+        @empty {
+          <p class="empty-state">No hay categorías registradas en el sistema.</p>
+        }
+      </div>
+    }
+
+    @else {
+      <div class="header-titulo" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px; background: white; padding: 12px 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <button (click)="volverACategorias()" style="padding: 8px 15px; background: #e0e0e0; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: #333;">
+          ⬅ Volver
+        </button>
+        <h2 style="margin: 0; color: #d97706;">{{ categoriaSeleccionada.nombre }}</h2>
+      </div>
+
+      <div class="product-grid">
+        @for (p of productosFiltrados; track p.idProducto) {
+        <div class="product-card">
+          <div class="card-top">
+            <h3 class="p-name">{{ p.nombre }}</h3>
+            <span class="p-cat">{{ p.categoria.nombre || 'General' }}</span>
+          </div>
+
+          <div class="card-mid">
+            <span class="p-price">S/ {{ (p.precio || 0).toFixed(2) }}</span>
+            <span class="p-stock" [class.low-stock]="(p.stock || 0) <= 5">{{ p.stock || 0 }} uds</span>
+          </div>
+
+          <div class="card-bottom">
+            <input type="number" #qtyInput class="qty-input" value="1" min="1" [max]="p.stock || 1">
+            <button class="btn-add" (click)="agregarAlCarrito(p, qtyInput.value)">
+              + Agregar
+            </button>
+          </div>
+        </div>
+        } @empty {
+        <p class="empty-state" style="grid-column: 1 / -1;">No hay productos disponibles en esta categoría.</p>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="cart-sidebar">
+    <div class="cart-header">
+      <div class="cart-title">
+        <h2>Carrito</h2>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <span class="badge">{{ carrito.length }} items</span>
+          @if (carrito.length > 0) {
+          <button class="btn-clear" (click)="vaciarCarrito()" title="Vaciar Carrito">🗑️</button>
+          }
+        </div>
+      </div>
+      <div class="cashier-info">
+        <label>CAJERO ACTIVO</label>
+        <div class="cajero-fijo-display" style="padding: 6px 10px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; font-weight: 600; color: #495057; font-size: 13px;">
+          👤 {{ nombreCajero }} — <span style="color: #d97706;">{{ rolUsuarioActual }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-body">
+      @if (carrito.length === 0) {
+      <div class="cart-empty">
+        <div style="font-size: 40px; margin-bottom: 10px; opacity: 0.3;">🛒</div>
+        <p>El carrito está vacío</p>
+        <span>Agrega productos desde el panel izquierdo</span>
+      </div>
+      }
+
+      <div class="cart-items">
+        @for (item of carrito; track item.producto.idProducto) {
+        <div class="cart-item">
+          <div class="item-info">
+            <strong>{{ item.producto.nombre }}</strong>
+
+            <div class="qty-controls">
+              <button (click)="disminuirCantidad(item.producto.idProducto)">-</button>
+              <span>{{ item.cantidad }}</span>
+              <button (click)="agregarAlCarrito(item.producto, '1')">+</button>
+              <small style="margin-left: 8px;">x S/ {{ (item.producto.precio || 0).toFixed(2) }}</small>
+            </div>
+          </div>
+
+          <div class="item-subtotal-action">
+            <div class="item-subtotal">
+              S/ {{ item.subtotal.toFixed(2) }}
+            </div>
+            <button class="btn-remove" (click)="eliminarItem(item.producto.idProducto)">❌ Quitar</button>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="cart-footer">
+      <div class="total-row" style="margin-bottom: 5px; font-size: 14px; color: #888;">
+        <span>Subtotal</span>
+        <span>S/ {{ subtotalVenta.toFixed(2) }}</span>
+      </div>
+      <div class="total-row" style="margin-bottom: 15px; font-size: 14px; color: #888;">
+        <span>IGV (18%)</span>
+        <span>S/ {{ igvVenta.toFixed(2) }}</span>
+      </div>
+
+      <div class="total-row">
+        <span>Total a Cobrar</span>
+        <span class="total-amount">S/ {{ totalVenta.toFixed(2) }}</span>
+      </div>
+
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc;">
+        <div class="total-row" style="margin-bottom: 10px;">
+          <span style="font-size: 14px; font-weight: 600; color: #333;">Efectivo Recibido:</span>
+          <div style="display: flex; align-items: center;">
+            <span style="margin-right: 5px; font-weight: 600; color: #333;">S/</span>
+            <input type="number" #pagoInput [value]="montoRecibido !== null ? montoRecibido : ''"
+              (input)="calcularVuelto(pagoInput.value)" placeholder="0.00" min="0"
+              style="width: 80px; padding: 6px; text-align: right; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; outline: none;">
+          </div>
+        </div>
+
+        <div class="total-row">
+          <span style="font-size: 14px; color: #555;">Vuelto:</span>
+          <span style="font-size: 16px; font-weight: bold;" [style.color]="vuelto > 0 ? '#28a745' : '#888'">
+            S/ {{ vuelto.toFixed(2) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- BOTÓN CON ESTADO DE CARGA (CA-03) -->
+      <button class="btn-checkout" style="margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 8px;" 
+        (click)="procesarVenta()"
+        [disabled]="carrito.length === 0 || !montoRecibido || montoRecibido < totalVenta || procesandoVenta">
+        
+        @if (procesandoVenta) {
+          ⏳ Procesando Venta...
+        } @else {
+          Procesar Venta
+        }
+      </button>
+    </div>
+  </div>
+</div>

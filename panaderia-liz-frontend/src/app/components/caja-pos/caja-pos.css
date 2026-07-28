@@ -1,0 +1,341 @@
+/* Layout Principal */
+.pos-wrapper {
+  display: flex;
+  height: 100vh;
+  background-color: #f8f9fa;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+/* Sección Izquierda (Catálogo) */
+.main-content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.header-section h1 {
+  font-size: 24px;
+  color: #2c2c2c;
+  margin: 0 0 5px 0;
+}
+
+.header-section p {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.search-bar select {
+  padding: 12px 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: white;
+  outline: none;
+}
+
+/* Grid de Productos */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-top {
+  margin-bottom: 15px;
+}
+
+.p-name {
+  font-size: 16px;
+  margin: 0 0 4px 0;
+  color: #333;
+}
+
+.p-cat {
+  font-size: 12px;
+  color: #888;
+}
+
+.card-mid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.p-price {
+  font-weight: 700;
+  font-size: 16px;
+  color: #333;
+}
+
+.p-stock {
+  font-size: 12px;
+  color: #888;
+}
+
+.low-stock {
+  color: #d9534f;
+  font-weight: bold;
+}
+
+/* Controles de Acción (Input y Botón) */
+.card-bottom {
+  display: flex;
+  gap: 10px;
+}
+
+.qty-input {
+  width: 60px;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 14px;
+  outline: none;
+}
+
+.btn-add {
+  flex: 1;
+  background-color: #3a2212; /* Marrón del diseño */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-add:hover {
+  background-color: #5a351d;
+}
+
+/* Sección Derecha (Carrito) */
+.cart-sidebar {
+  width: 350px;
+  background-color: #ffffff;
+  border-left: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-header {
+  padding: 25px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.cart-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.cart-title h2 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.badge {
+  background-color: #f0e9e2;
+  color: #8b6038;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cashier-info label {
+  display: block;
+  font-size: 10px;
+  color: #888;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.cashier-info select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.cart-body {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.cart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #888;
+  text-align: center;
+}
+
+.cart-empty p {
+  margin: 5px 0;
+  color: #555;
+  font-weight: 500;
+}
+
+.cart-empty span {
+  font-size: 12px;
+}
+
+/* Items del Carrito */
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.item-info strong {
+  display: block;
+  font-size: 14px;
+  color: #333;
+}
+
+.item-info small {
+  color: #888;
+}
+
+.item-subtotal {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Footer del Carrito */
+.cart-footer {
+  padding: 20px;
+  border-top: 1px solid #f0f0f0;
+  background-color: #fafafa;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.total-row span {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.total-amount {
+  font-size: 20px !important;
+  color: #d35400; /* Color naranja/marrón del total */
+}
+
+.btn-checkout {
+  width: 100%;
+  padding: 15px;
+  background-color: #4c3ef0; /* Color primario Figma (puedes ajustarlo) */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-checkout:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Controles de cantidad en el carrito (Nueva función) */
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.qty-controls button {
+  width: 22px;
+  height: 22px;
+  border: 1px solid #ddd;
+  background: #f8f9fa;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.qty-controls button:hover {
+  background: #e2e6ea;
+  border-color: #ccc;
+}
+
+.item-subtotal-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.btn-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: #dc3545; /* Rojo sutil */
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.btn-remove:hover {
+  opacity: 0.7;
+}
+
+.btn-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  transition: transform 0.2s;
+}
+
+.btn-clear:hover {
+  transform: scale(1.1);
+}

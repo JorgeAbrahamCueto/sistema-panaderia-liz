@@ -1,0 +1,43 @@
+<div class="bienvenida-container">
+  <!-- Cabecera Superior -->
+  <header class="header-bienvenida">
+    <div class="logo-area">
+      <h2>🍞 Panadería Liz</h2>
+    </div>
+    <div class="user-info">
+      <span>Bienvenido, <strong>{{ nombreUsuario }}</strong> ({{ rolUsuario }})</span>
+      <button class="btn-salir" (click)="cerrarSesion()">Cerrar Sesión</button>
+    </div>
+  </header>
+
+  <!-- Contenido Principal con Tarjetas de Menú -->
+  <main class="menu-grid">
+    <h2>Panel Principal</h2>
+    <p class="sub">Seleccione el módulo al que desea ingresar:</p>
+
+    <div class="cards-container">
+      <!-- Módulo Caja / POS (Disponible para Cajeros y Admin) -->
+      <div class="card" (click)="irA('/caja')">
+        <div class="icon">🛒</div>
+        <h3>Punto de Venta (Caja)</h3>
+        <p>Realizar ventas, registrar cobros y emitir tickets.</p>
+      </div>
+
+      <!-- Módulo Auditoría / Ventas del Día (Disponible para Cajeros y Admin) -->
+      <div class="card audit-card" (click)="irA('/auditoria')">
+        <div class="icon">📊</div>
+        <h3>Auditoría / Ventas del Día</h3>
+        <p>Consultar el historial y el total de las ventas realizadas.</p>
+      </div>
+
+      <!-- Módulo Catálogo (Exclusivo para ADMIN) -->
+      @if (rolUsuario === 'ADMIN') {
+        <div class="card admin-card" (click)="irA('/catalogo')">
+          <div class="icon">📦</div>
+          <h3>Gestión de Catálogo</h3>
+          <p>Crear, editar y eliminar productos y categorías del inventario.</p>
+        </div>
+      }
+    </div>
+  </main>
+</div>

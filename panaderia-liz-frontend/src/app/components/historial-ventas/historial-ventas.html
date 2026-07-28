@@ -1,0 +1,147 @@
+<div class="admin-wrapper">
+  <!-- Cabecera principal -->
+  <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+    <div>
+      <h1>Auditoría de Ventas</h1>
+      <p>Historial completo de comprobantes emitidos</p>
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+      <button (click)="exportarAExcel()" style="padding: 10px 16px; background-color: #107c41; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+        📊 Descargar Excel
+      </button>
+
+      <button (click)="irAHome()" style="padding: 10px 18px; background-color: #4f46e5; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px;">
+        🏠 Ir al Inicio (Home)
+      </button>
+    </div>
+  </div>
+
+  <!-- BARRA DE FILTROS POR FECHA Y TOTAL EN TIEMPO REAL -->
+  <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin: 20px 0; flex-wrap: wrap; gap: 15px;">
+    
+    <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+      <span style="font-weight: 600; color: #333;">Filtrar por Fecha:</span>
+      
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 13px; color: #666;">Desde:</label>
+        <input type="date" [(ngModel)]="filtroFechaInicio" (change)="filtrarPorFechas()" 
+          style="padding: 6px 10px; border: 1px solid #ccc; border-radius: 6px; outline: none;">
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <label style="font-size: 13px; color: #666;">Hasta:</label>
+        <input type="date" [(ngModel)]="filtroFechaFin" (change)="filtrarPorFechas()" 
+          style="padding: 6px 10px; border: 1px solid #ccc; border-radius: 6px; outline: none;">
+      </div>
+
+      @if (filtroFechaInicio || filtroFechaFin) {
+        <button (click)="limpiarFiltro()" style="padding: 6px 12px; background-color: #e0e0e0; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: #333;">
+          ❌ Limpiar
+        </button>
+      }
+    </div>
+
+    <!-- TARJETA DE TOTAL ACUMULADO (HU-06) -->
+    <div style="background: #f8f9fa; padding: 8px 15px; border-radius: 8px; border-left: 4px solid #107c41; display: flex; flex-direction: column;">
+      <span style="font-size: 11px; color: #666; font-weight: 600; text-transform: uppercase;">Total Ingresos (Filtrado)</span>
+      <span style="font-size: 18px; font-weight: bold; color: #107c41;">S/ {{ calcularTotalFiltrado().toFixed(2) }}</span>
+    </div>
+
+  </div>
+
+  @if (mensajeError) {
+    <div class="alert error">{{ mensajeError }}</div>
+  }
+
+  <div class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>N° Ticket</th>
+          <th>Fecha y Hora</th>
+          <th>Cajero Responsable</th>
+          <th>Subtotal</th>
+          <th>IGV (18%)</th>
+          <th>Total Pagado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Usamos ventasFiltradas en lugar de ventas -->
+        @for (venta of ventasFiltradas; track $index) {
+          <tr>
+            <td><strong>#{{ venta['idVenta'] || venta.id }}</strong></td>
+            <td>{{ venta.fechaVenta ? (venta.fechaVenta | date:'dd/MM/yyyy, h:mm a') : 'Reciente' }}</td>
+            <td>{{ $any(venta.usuario)?.username || $any(venta.usuario)?.nombre || 'Cajero' }}</td>
+            <td>S/ {{ (venta.subtotal || 0).toFixed(2) }}</td>
+            <td>S/ {{ (venta.igv || 0).toFixed(2) }}</td>
+            <td class="total-monto">S/ {{ (venta.total || 0).toFixed(2) }}</td>
+            <td>
+              <button class="btn-detalle" (click)="verDetalles(venta)">Ver Detalles</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7" class="empty-state">No hay registros de ventas para el rango de fechas seleccionado. (Total: S/ 0.00)</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MODAL DE DETALLES DE VENTA -->
+@if (ventaSeleccionada) {
+<div class="modal-overlay" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Detalle del Ticket #{{ ventaSeleccionada['idVenta'] || ventaSeleccionada.id }}</h2>
+      <button class="btn-close" (click)="cerrarModal()">✖</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="modal-info-row">
+        <span><strong>Fecha:</strong> {{ ventaSeleccionada.fechaVenta ? (ventaSeleccionada.fechaVenta | date:'dd/MM/yyyy, h:mm a') : 'N/D' }}</span>
+        <span><strong>Cajero:</strong> {{ $any(ventaSeleccionada.usuario)?.username || $any(ventaSeleccionada.usuario)?.nombre || 'N/D' }}</span>
+      </div>
+
+      <table class="detalle-table">
+        <thead>
+          <tr>
+            <th>Cant.</th>
+            <th>Producto</th>
+            <th>P. Unitario</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (detalle of ventaSeleccionada.detalles; track $index) {
+            <tr>
+              <td>{{ detalle.cantidad }}x</td>
+              <td>{{ $any(detalle.producto)?.nombre }}</td>
+              <td>S/ {{ ($any(detalle).precioUnitario || 0).toFixed(2) }}</td>
+              <td><strong>S/ {{ (detalle.subtotal || 0).toFixed(2) }}</strong></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="modal-totales">
+        <div class="tot-row">
+          <span>Efectivo Recibido:</span> 
+          <span>S/ {{ (ventaSeleccionada.montoRecibido || 0).toFixed(2) }}</span>
+        </div>
+        <div class="tot-row">
+          <span>Vuelto Entregado:</span> 
+          <span>S/ {{ (ventaSeleccionada.vuelto || 0).toFixed(2) }}</span>
+        </div>
+        <div class="tot-row final">
+          <span>Total de la Venta:</span> 
+          <span>S/ {{ (ventaSeleccionada.total || 0).toFixed(2) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
